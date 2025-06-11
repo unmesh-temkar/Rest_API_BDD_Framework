@@ -7,8 +7,8 @@ import org.junit.runner.RunWith;
 @RunWith(Cucumber.class)
 @CucumberOptions(
         features = "src/test/java/features",
-        glue = {"stepDefinitions"},
-        tags = "@TestGoogleMapAPIs"
+        glue = {"stepDefinitions"}
+//        tags = "@DeletePlace"
 )
 public class TestRunner {
 

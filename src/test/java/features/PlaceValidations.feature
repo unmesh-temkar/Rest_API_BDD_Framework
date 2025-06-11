@@ -1,7 +1,7 @@
 @TestGoogleMapAPIs
 Feature: Validating place API's
 
-  @AddPlaceAPITest
+  @AddPlace
   Scenario Outline: Verify if place is being successfully added using addPlaceAPIResource
 
     Given We prepare add place API payload with "<name>", "<language>" and "<address>"
@@ -15,7 +15,7 @@ Feature: Validating place API's
       | Robert Dicosta | Marathi  | Khatra Mahal      |
       | Babu Bisleri   | Hindi    | Shamshan ke samne |
 
-  @DeletePlaceAPITest
+  @DeletePlace
     Scenario: Verify if place is being successfully deleted using deletePlaceAPIResource
       Given We prepare delete place API payload
       When We call resource "deletePlaceAPIResource" with "POST" HTTP request

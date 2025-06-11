@@ -20,6 +20,14 @@ public class StepDefinitions extends Utils {
     private final Payload payload = new Payload();
     private static String placeId;
 
+    public static String getPlaceId() {
+        return placeId;
+    }
+
+    public static void setPlaceId(String placeId) {
+        StepDefinitions.placeId = placeId;
+    }
+
     @Given("We prepare add place API payload with {string}, {string} and {string}")
     public void addPlacePayload(String name, String language, String address) throws IOException {
         request =
