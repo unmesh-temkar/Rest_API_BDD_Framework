@@ -12,6 +12,15 @@ import java.nio.file.Paths;
 import java.util.Properties;
 
 public class Utils {
+    private static RequestSpecification requestSpecification;
+
+    public static RequestSpecification getRequestSpecification() {
+        return requestSpecification;
+    }
+
+    public static void setRequestSpecification(RequestSpecification requestSpecification) {
+        Utils.requestSpecification = requestSpecification;
+    }
 
     public RequestSpecification buildRequestSpec() throws IOException {
         /*
@@ -22,18 +31,22 @@ public class Utils {
             logDirectory.mkdirs(); // Creates the directory and necessary parent directories
         }
 
-        PrintStream log =
-                new PrintStream(
-                        Files.newOutputStream(Paths.get(logDirectory + File.separator + "log.txt"))
-                );
-
-        return new RequestSpecBuilder()
-                .setBaseUri(getGlobalValue("baseURL"))
-                .addQueryParam("key", "qaclick123")
-                .setContentType(ContentType.JSON)
-                .addFilter(RequestLoggingFilter.logRequestTo(log))
-                .addFilter(ResponseLoggingFilter.logResponseTo(log))
-                .build();
+        if (getRequestSpecification() == null) {
+            PrintStream log =
+                    new PrintStream(
+                            Files.newOutputStream(Paths.get(logDirectory + File.separator + "log.txt"))
+                    );
+            setRequestSpecification(
+                    new RequestSpecBuilder()
+                            .setBaseUri(getGlobalValue("baseURL"))
+                            .addQueryParam("key", "qaclick123")
+                            .setContentType(ContentType.JSON)
+                            .addFilter(RequestLoggingFilter.logRequestTo(log))
+                            .addFilter(ResponseLoggingFilter.logResponseTo(log))
+                            .build()
+            );
+        }
+        return getRequestSpecification();
     }
 
     public static String getGlobalValue(String key) throws IOException {

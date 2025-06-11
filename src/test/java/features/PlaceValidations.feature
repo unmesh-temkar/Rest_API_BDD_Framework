@@ -9,6 +9,7 @@ Feature: Validating place API's
     And We verify that the key 'status' in the response body has a value of 'OK'
     And We verify that the key 'scope' in the response body has a value of 'APP'
     Examples:
-      | name           | language | address      |
-      | Robert Dicosta | English  | Khatra Mahal |
+      | name           | language | address           |
+      | Robert Dicosta | Marathi  | Khatra Mahal      |
+      | Babu Bisleri   | Hindi    | Shamshan ke samne |
 
