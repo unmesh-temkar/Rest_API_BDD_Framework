@@ -1,6 +1,6 @@
 Feature: Validating place API's
 
-  @AddPlaceTest
+  @AddPlaceAPITest
   Scenario Outline: Verify if place is being successfully added using AddPlaceAPI
 
     Given We prepare add place API payload with "<name>", "<language>" and "<address>"

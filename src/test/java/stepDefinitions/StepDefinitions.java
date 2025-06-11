@@ -27,13 +27,18 @@ public class StepDefinitions extends Utils {
     }
 
     @When("We call resource {string} with {string} HTTP request")
-    public void we_call_with_post_http_request(String resource, String httpRequest) {
+    public void we_call_with_post_http_request(String resource, String httpMethod) {
         String apiResource = APIResources.valueOf(resource).getResource();
 
-        response =
-                request
-                        .when()
-                        .post(apiResource);
+        if (httpMethod.equalsIgnoreCase("POST")) {
+            response = request
+                    .when()
+                    .post(apiResource);
+        } else if (httpMethod.equalsIgnoreCase("GET")) {
+            response = request
+                    .when()
+                    .get(apiResource);
+        }
     }
 
     @Then("We verify that the status code is {int}")
@@ -51,6 +56,6 @@ public class StepDefinitions extends Utils {
 
         JsonPath jsonPath = new JsonPath(responseStr);
         String valueFromResponse = jsonPath.get(key);
-        Assert.assertEquals(value,valueFromResponse);
+        Assert.assertEquals(value, valueFromResponse);
     }
 }
