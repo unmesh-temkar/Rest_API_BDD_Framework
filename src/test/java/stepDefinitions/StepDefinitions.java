@@ -5,6 +5,7 @@ import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.junit.Assert;
+import resources.APIResources;
 import resources.testData.Payload;
 import resources.utils.Utils;
 
@@ -25,12 +26,14 @@ public class StepDefinitions extends Utils {
                         .body(payload.addPlaceRequestBody(name, language, address));
     }
 
-    @When("We call {string} with POST HTTP request")
-    public void we_call_with_post_http_request(String string) {
+    @When("We call resource {string} with {string} HTTP request")
+    public void we_call_with_post_http_request(String resource, String httpRequest) {
+        String apiResource = APIResources.valueOf(resource).getResource();
+
         response =
                 request
                         .when()
-                        .post("/maps/api/place/add/json");
+                        .post(apiResource);
     }
 
     @Then("We verify that the status code is {int}")
