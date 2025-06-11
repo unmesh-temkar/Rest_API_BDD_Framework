@@ -1,6 +1,10 @@
 package stepDefinitions;
 
+import POJO.AddPlaceResponseBody;
 import io.cucumber.java.en.*;
+import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.filter.log.RequestLoggingFilter;
+import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
@@ -57,5 +61,24 @@ public class StepDefinitions extends Utils {
         JsonPath jsonPath = new JsonPath(responseStr);
         String valueFromResponse = jsonPath.get(key);
         Assert.assertEquals(value, valueFromResponse);
+    }
+
+    @And("We verify that the place_id generated maps to expected {string} using api resource {string}")
+    public void validatePlaceId(String expectedName, String resource) throws IOException {
+        String place_id = response.as(AddPlaceResponseBody.class).getPlace_id();
+
+        String getPlaceResponse =
+                given()
+                        .spec(buildRequestSpec())
+                        .queryParam("place_id", place_id)
+                        .when()
+                        .get(APIResources.getPlaceAPIResource.getResource())
+                        .then()
+                        .extract().response().asPrettyString();
+
+        String actualName = Utils.extractJsonValue(getPlaceResponse,"name");
+//        String actualName = new JsonPath(getPlaceResponse).get("name");
+
+        Assert.assertEquals(actualName, expectedName);
     }
 }
