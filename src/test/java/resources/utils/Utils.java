@@ -5,6 +5,7 @@ import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
+import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
 import java.io.*;
@@ -57,8 +58,9 @@ public class Utils {
         return globalProperties.getProperty(key);
     }
 
-    public static String extractJsonValue(String jsonResponse, String jsonKey) {
-        JsonPath jsonPath = new JsonPath(jsonResponse);
+    public static String extractJsonValue(Response response, String jsonKey) {
+        String jsonResponseString = response.asPrettyString();
+        JsonPath jsonPath = new JsonPath(jsonResponseString);
         return jsonPath.getString(jsonKey);
     }
 }

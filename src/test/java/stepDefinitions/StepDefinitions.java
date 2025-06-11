@@ -31,7 +31,7 @@ public class StepDefinitions extends Utils {
     }
 
     @When("We call resource {string} with {string} HTTP request")
-    public void we_call_with_post_http_request(String resource, String httpMethod) {
+    public void executeHttpRequest(String resource, String httpMethod) {
         String apiResource = APIResources.valueOf(resource).getResource();
 
         if (httpMethod.equalsIgnoreCase("POST")) {
@@ -66,19 +66,12 @@ public class StepDefinitions extends Utils {
     @And("We verify that the place_id generated maps to expected {string} using api resource {string}")
     public void validatePlaceId(String expectedName, String resource) throws IOException {
         String place_id = response.as(AddPlaceResponseBody.class).getPlace_id();
-
-        String getPlaceResponse =
+        request =
                 given()
                         .spec(buildRequestSpec())
-                        .queryParam("place_id", place_id)
-                        .when()
-                        .get(APIResources.getPlaceAPIResource.getResource())
-                        .then()
-                        .extract().response().asPrettyString();
-
-        String actualName = Utils.extractJsonValue(getPlaceResponse,"name");
-//        String actualName = new JsonPath(getPlaceResponse).get("name");
-
+                        .queryParam("place_id", place_id);
+        executeHttpRequest(resource, "GET");
+        String actualName = Utils.extractJsonValue(response, "name");
         Assert.assertEquals(actualName, expectedName);
     }
 }
