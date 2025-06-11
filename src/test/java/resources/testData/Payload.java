@@ -29,4 +29,9 @@ public class Payload {
         return addPlaceRequestBody;
     }
 
+    public static String deletePlaceRequestBody(String placeId) {
+        return "{\n" +
+                "    \"place_id\":\"" + placeId + "\"\n" +
+                "}\n";
+    }
 }

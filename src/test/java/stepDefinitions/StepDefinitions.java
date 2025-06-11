@@ -2,9 +2,6 @@ package stepDefinitions;
 
 import POJO.AddPlaceResponseBody;
 import io.cucumber.java.en.*;
-import io.restassured.builder.RequestSpecBuilder;
-import io.restassured.filter.log.RequestLoggingFilter;
-import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
@@ -21,6 +18,7 @@ public class StepDefinitions extends Utils {
     private RequestSpecification request;
     private Response response;
     private final Payload payload = new Payload();
+    private static String placeId;
 
     @Given("We prepare add place API payload with {string}, {string} and {string}")
     public void addPlacePayload(String name, String language, String address) throws IOException {
@@ -65,13 +63,22 @@ public class StepDefinitions extends Utils {
 
     @And("We verify that the place_id generated maps to expected {string} using api resource {string}")
     public void validatePlaceId(String expectedName, String resource) throws IOException {
-        String place_id = response.as(AddPlaceResponseBody.class).getPlace_id();
+        placeId = response.as(AddPlaceResponseBody.class).getPlace_id();
+
         request =
                 given()
                         .spec(buildRequestSpec())
-                        .queryParam("place_id", place_id);
+                        .queryParam("place_id", placeId);
         executeHttpRequest(resource, "GET");
         String actualName = Utils.extractJsonValue(response, "name");
         Assert.assertEquals(actualName, expectedName);
+    }
+
+    @Given("We prepare delete place API payload")
+    public void prepareDeletePlaceAPIPayload() throws IOException {
+        request =
+                given()
+                        .spec(buildRequestSpec())
+                        .body(Payload.deletePlaceRequestBody(placeId));
     }
 }
